@@ -1,8 +1,15 @@
 import React from 'react'
+import "./App.css"
+import Navbar from './components/Navbar'
+import CharacterList from './components/CharacterList'
+import CharacterDetail from './components/CharacterDetail'
+
 
 function App() {
   return (
-    <div>App</div>
+    <div className='app'>
+      <Navbar/>
+    </div>
   )
 }
 
