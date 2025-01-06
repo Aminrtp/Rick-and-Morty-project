@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "./App.css"
-import Navbar from './components/Navbar'
+import Navbar, { Search } from './components/Navbar'
 import CharacterList from './components/CharacterList'
 import CharacterDetail from './components/CharacterDetail'
 import axios from 'axios'
@@ -48,7 +48,10 @@ function App() {
   return (
     <div className='app'>
       <Toaster />
-      <Navbar />
+      <Navbar >
+        <Search />
+        <div className='navbar__result'>Found X characters</div>
+      </Navbar>
       <div className='main'>
 
         <CharacterList characters={characters} isLoading={isLoading} />
