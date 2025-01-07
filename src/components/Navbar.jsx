@@ -7,9 +7,8 @@ function Navbar({ children }) {
     return (
         <nav className='navbar'>
             <Logo />
-            <Search />
-            <div className='navbar__result'>Found X characters</div>
 
+            {children}
             <Favourites />
         </nav>
     );
@@ -23,10 +22,16 @@ function Logo() {
     )
 }
 
-export function Search() {
+export function Search({ query, setQuery }) {
     return (
         <div>
-            <input type="text" className='text-field' placeholder='search ...' />
+            <input
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                type="text"
+                className='text-field'
+                placeholder='search ...'
+            />
         </div>
     )
 }

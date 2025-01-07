@@ -12,6 +12,7 @@ import { Toaster, toast } from 'react-hot-toast'
 function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState("");
 
   // useEffect(() => {
   //   setIsLoading(true);
@@ -31,25 +32,26 @@ function App() {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get("https://rickandmortyapi.com/api/character")
+    axios.get(`https://rickandmortyapi.com/api/character/?name=${query}`)
       .then(({ data }) => {
-        console.log(data);
         setCharacters(data.results.slice(0, 5))
       })
       .catch((err) => {
+        setCharacters([])
         toast.error(err.response.data.error)
       })
       .finally(
         () => setIsLoading(false)
       )
-  }, [])
+  }, [query])
+  
 
 
   return (
     <div className='app'>
       <Toaster />
       <Navbar >
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <div className='navbar__result'>Found X characters</div>
       </Navbar>
       <div className='main'>
