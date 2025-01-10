@@ -7,12 +7,11 @@ import axios from 'axios'
 import { Toaster, toast } from 'react-hot-toast'
 
 
-
-
 function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState(null)
 
   // useEffect(() => {
   //   setIsLoading(true);
@@ -44,8 +43,10 @@ function App() {
         () => setIsLoading(false)
       )
   }, [query])
-  
 
+  const handleSelectCharacter = (id) => {
+    setSelectedId(prevId => prevId === id ? null : id);
+  };
 
   return (
     <div className='app'>
@@ -56,9 +57,13 @@ function App() {
       </Navbar>
       <div className='main'>
 
-        <CharacterList characters={characters} isLoading={isLoading} />
-
-        <CharacterDetail />
+        <CharacterList 
+        onSelectCharacter={handleSelectCharacter}
+        characters={characters} 
+        isLoading={isLoading} 
+        selectedId={selectedId}
+        />
+        <CharacterDetail  selectedId={selectedId}/>
       </div>
     </div>
   )

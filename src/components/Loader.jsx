@@ -1,9 +1,9 @@
 import React from 'react'
 
-function Loading() {
+function Loader() {
   return (
     <div style={{color:"white"}}>Loading Data...</div>
   )
 }
 
-export default Loading
+export default Loader

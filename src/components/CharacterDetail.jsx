@@ -1,8 +1,73 @@
-import React from 'react'
-import { character, episodes } from "../../data/data";
+import React, { useEffect, useState } from 'react'
+import { episodes } from "../../data/data";
 import { ArrowUpCircleIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import Loader from './Loader'
 
-function CharacterDetail() {
+function CharacterDetail({ selectedId }) {
+  const [character, setCharacter] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  // useEffect(() => {
+  //   axios.get(`https://rickandmortyapi.com/api/character/${selectedId}`)
+  //     .then((res) => setCharacter(res.data)
+  //     ).catch((err) => {
+  //       console.log("Error fetching character:", err);
+  //     })
+  // }, [selectedId])
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const { data } = await axios.get(`https://rickandmortyapi.com/api/character/${selectedId}`)
+  //       setCharacter(data)
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   fetchData()
+  // }, [selectedId])
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const { data } = await axios.get(`https://rickandmortyapi.com/api/character/${selectedId}`);
+  //       setCharacter(data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   if (selectedId) {
+  //     fetchData();
+  //   }
+  // }, [selectedId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true)
+        const { data } = await axios.get(`https://rickandmortyapi.com/api/character/${selectedId}`)
+        setCharacter(data);
+
+      } catch (error) {
+        toast.error(error.response.data.error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (selectedId) fetchData()
+  }, [selectedId])
+
+
+  if (!character) return (
+    <div style={{ flex: 1, color: "var(--slate-100)", }}>select a character</div>
+  )
+
+  if (isLoading) return <Loader />
   return (
     <div style={{ flex: 1 }}>
       <div className='character-detail'>
@@ -18,8 +83,8 @@ function CharacterDetail() {
           </h3>
           <div className="info">
             <span className={`status ${character.status === "Dead" ? "red" : ""}`}></span>
-            <span>{character.status}</span>
-            <span>- {character.species}</span>
+            <span> {character.status}</span>
+            {/* <span> - {character.species}</span> */}
           </div>
           <div className="location">
             <p>Last known Locations:</p>
