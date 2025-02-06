@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { episodes } from "../../data/data";
-import { ArrowUpCircleIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import Loader from './Loader'
+import Loader from './Loader';
+import { ArrowUpCircleIcon } from '@heroicons/react/24/outline';
+
 
 function CharacterDetail({ selectedId }) {
   const [character, setCharacter] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [episodes, setEpisodes] = useState([]);
 
   // useEffect(() => {
   //   axios.get(`https://rickandmortyapi.com/api/character/${selectedId}`)
@@ -46,14 +46,26 @@ function CharacterDetail({ selectedId }) {
   // }, [selectedId]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    async function fetchData() {
       try {
         setIsLoading(true)
-        const { data } = await axios.get(`https://rickandmortyapi.com/api/character/${selectedId}`)
+        const { data } = await axios.get(
+          `https://rickandmortyapi.com/api/character/${selectedId}`);
         setCharacter(data);
+
+        const episodesId = data.episode.map(e => e.split("/").at(-1))
+        setEpisodes(episodesId)
+      
+        
+        const { data: episodes } = await axios.get(
+          `https://rickandmortyapi.com/api/episode/${episodesId}`);
+          console.log(episodes);
+        setEpisodes([episodes].flat());
 
       } catch (error) {
         toast.error(error.response.data.error)
+        console.log(error.response.data.error);
+
       } finally {
         setIsLoading(false)
       }
@@ -84,7 +96,7 @@ function CharacterDetail({ selectedId }) {
           <div className="info">
             <span className={`status ${character.status === "Dead" ? "red" : ""}`}></span>
             <span> {character.status}</span>
-            {/* <span> - {character.species}</span> */}
+            <span> - {character.species}</span>
           </div>
           <div className="location">
             <p>Last known Locations:</p>

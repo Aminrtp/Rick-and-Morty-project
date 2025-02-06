@@ -53,17 +53,19 @@ function App() {
       <Toaster />
       <Navbar >
         <Search query={query} setQuery={setQuery} />
-        <div className='navbar__result'>Found X characters</div>
+        <div className='navbar__result'>
+          Found {characters.length} characters
+        </div>
       </Navbar>
       <div className='main'>
 
-        <CharacterList 
-        onSelectCharacter={handleSelectCharacter}
-        characters={characters} 
-        isLoading={isLoading} 
-        selectedId={selectedId}
+        <CharacterList
+          onSelectCharacter={handleSelectCharacter}
+          characters={characters}
+          isLoading={isLoading}
+          selectedId={selectedId}
         />
-        <CharacterDetail  selectedId={selectedId}/>
+        <CharacterDetail selectedId={selectedId} />
       </div>
     </div>
   )
