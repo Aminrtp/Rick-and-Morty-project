@@ -14,36 +14,57 @@ function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [favourites, setFavourites] = useState([]);
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   fetch("https://rickandmortyapi.com/api/character")
-  //     .then((res) => {
-  //       if (!res.ok) new Error("Errorr")
-  //       return res.json()
-  //     })
-  //     .then((data) => {
-  //       setCharacters(data.results)
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     })
-  //     .finally(() => setIsLoading(false))
-  // }, [])
 
   useEffect(() => {
-    setIsLoading(true);
-    axios.get(`https://rickandmortyapi.com/api/character/?name=${query}`)
-      .then(({ data }) => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        const { data } = await axios.get(`https://rickandmortyapi.com/api/character/?name=${query}`, { signal })
         setCharacters(data.results.slice(0, 5))
-      })
-      .catch((err) => {
-        setCharacters([])
-        toast.error(err.response.data.error)
-      })
-      .finally(
-        () => setIsLoading(false)
-      )
-  }, [query])
+      }
+      catch (err) {
+        if(!axios.isCancel()){   
+          setCharacters([])
+          toast.error(err.response.data.error)
+        }
+      }
+      finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData();
+
+    return () => {
+      controller.abort();
+    };
+  }, [query]);
+
+  // useEffect(() => {
+  //   const controller = new AbortController();
+  //   const signal = controller.signal;
+
+  //   setIsLoading(true);
+  //   axios.get(`https://rickandmortyapi.com/api/character/?name=${query}`, { signal })
+  //     .then(({ data }) => {
+  //       setCharacters(data.results.slice(0, 5))
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       setCharacters([])
+  //       toast.error(err.response.data.error)
+  //     })
+
+  //     .finally(
+  //       () => setIsLoading(false)
+  //     )
+
+  //   return () => {
+  //     controller.abort()
+  //   }
+  // }, [query])
 
   const handleSelectCharacter = (id) => {
     setSelectedId(prevId => prevId === id ? null : id);
@@ -73,10 +94,10 @@ function App() {
           isLoading={isLoading}
           selectedId={selectedId}
         />
-        <CharacterDetail 
-        selectedId={selectedId} 
-        onAddFavourite={handleAddFavourite} 
-        isAddToFavourite={isAddToFavourite}
+        <CharacterDetail
+          selectedId={selectedId}
+          onAddFavourite={handleAddFavourite}
+          isAddToFavourite={isAddToFavourite}
         />
       </div>
     </div>
@@ -84,3 +105,11 @@ function App() {
 }
 
 export default App
+
+
+
+
+
+
+
+
