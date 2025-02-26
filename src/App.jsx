@@ -5,8 +5,6 @@ import CharacterList from './components/CharacterList'
 import CharacterDetail from './components/CharacterDetail'
 import axios from 'axios'
 import { Toaster, toast } from 'react-hot-toast'
-import Modal from './components/Modal'
-
 
 function App() {
   const [characters, setCharacters] = useState([]);
@@ -26,7 +24,7 @@ function App() {
         setCharacters(data.results.slice(0, 5))
       }
       catch (err) {
-        if(!axios.isCancel()){   
+        if (!axios.isCancel()) {
           setCharacters([])
           toast.error(err.response.data.error)
         }
@@ -43,32 +41,9 @@ function App() {
     };
   }, [query]);
 
-  // useEffect(() => {
-  //   const controller = new AbortController();
-  //   const signal = controller.signal;
-
-  //   setIsLoading(true);
-  //   axios.get(`https://rickandmortyapi.com/api/character/?name=${query}`, { signal })
-  //     .then(({ data }) => {
-  //       setCharacters(data.results.slice(0, 5))
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       setCharacters([])
-  //       toast.error(err.response.data.error)
-  //     })
-
-  //     .finally(
-  //       () => setIsLoading(false)
-  //     )
-
-  //   return () => {
-  //     controller.abort()
-  //   }
-  // }, [query])
 
   const handleSelectCharacter = (id) => {
-    setSelectedId(prevId => prevId === id ? null : id);
+    setSelectedId(id);
   };
 
   const onAddFavourite = (char) => {
@@ -77,18 +52,17 @@ function App() {
 
   const isAddToFavourite = favourites.map((fav) => fav.id).includes(selectedId);
 
+  const onDeleteFavourite = (id) => setFavourites(favourites.filter(fav => fav.id !== id))
+
   return (
     <div className='app'>
       <Toaster />
-      {/* <Modal title={"modal"} open={true} onOpen={()=>{}} >
-          Lorem, ipsum dolor.
-        </Modal> */}
       <Navbar >
         <Search query={query} setQuery={setQuery} />
         <div className='navbar__result'>
           Found {characters.length} characters
         </div>
-        <Favourites numOfFavourites={favourites.length} />
+        <Favourites favourites={favourites} onDeleteFavourite={onDeleteFavourite} />
       </Navbar>
       <div className='main'>
 
@@ -103,7 +77,7 @@ function App() {
           onAddFavourite={onAddFavourite}
           isAddToFavourite={isAddToFavourite}
         />
-        
+
       </div>
     </div>
   )
