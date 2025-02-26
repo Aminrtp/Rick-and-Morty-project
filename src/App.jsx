@@ -5,6 +5,7 @@ import CharacterList from './components/CharacterList'
 import CharacterDetail from './components/CharacterDetail'
 import axios from 'axios'
 import { Toaster, toast } from 'react-hot-toast'
+import Modal from './components/Modal'
 
 
 function App() {
@@ -70,7 +71,7 @@ function App() {
     setSelectedId(prevId => prevId === id ? null : id);
   };
 
-  const handleAddFavourite = (char) => {
+  const onAddFavourite = (char) => {
     setFavourites((prev) => [...prev, char])
   }
 
@@ -79,6 +80,9 @@ function App() {
   return (
     <div className='app'>
       <Toaster />
+      {/* <Modal title={"modal"} open={true} onOpen={()=>{}} >
+          Lorem, ipsum dolor.
+        </Modal> */}
       <Navbar >
         <Search query={query} setQuery={setQuery} />
         <div className='navbar__result'>
@@ -96,9 +100,10 @@ function App() {
         />
         <CharacterDetail
           selectedId={selectedId}
-          onAddFavourite={handleAddFavourite}
+          onAddFavourite={onAddFavourite}
           isAddToFavourite={isAddToFavourite}
         />
+        
       </div>
     </div>
   )

@@ -81,7 +81,8 @@ function CharacterDetail({ selectedId, onAddFavourite, isAddToFavourite }) {
   if (isLoading) return <Loader />
   return (
     <div style={{ flex: 1 }}>
-      <CharacterSubInfo character={character} isAddToFavourite={isAddToFavourite} />
+      <CharacterSubInfo character={character} onAddFavourite={onAddFavourite}
+       isAddToFavourite={isAddToFavourite} />
       <EpisodeList episodes={episodes} />
 
     </div>
@@ -91,7 +92,7 @@ function CharacterDetail({ selectedId, onAddFavourite, isAddToFavourite }) {
 export default CharacterDetail
 
 
-function CharacterSubInfo({ character, isAddToFavourite }) {
+function CharacterSubInfo({ character, isAddToFavourite , onAddFavourite}) {
   return (
     <div className='character-detail'>
       <img
@@ -114,7 +115,6 @@ function CharacterSubInfo({ character, isAddToFavourite }) {
           <p>{character.location.name}</p>
         </div>
         <div className='actions'>
-
           {
             isAddToFavourite ? (<p>already added to favorite ✔</p>
             ) : (
@@ -131,18 +131,21 @@ function CharacterSubInfo({ character, isAddToFavourite }) {
 
 function EpisodeList({ episodes }) {
   const [sortBy, setSortBy] = useState(true);
-  let sortedEpisodes ;
+  let sortedEpisodes;
   if (sortBy) {
-    sortedEpisodes = [...episodes].sort((a, b) => new Date(a.created) - new Date(b.created))
+    sortedEpisodes = [...episodes].sort(
+      (a, b) => new Date(a.created) - new Date(b.created))
   } else {
-    sortedEpisodes = [...episodes].sort((a, b) => new Date(b.created) - new Date(a.created))
+    sortedEpisodes = [...episodes].sort(
+      (a, b) => new Date(b.created) - new Date(a.created))
   }
   return (
     <div className="character-episodes">
       <div className="title">
         <h2> Last Episodes</h2>
-        <button onClick={() =>  setSortBy((is) => !is) }>
-          <ArrowUpCircleIcon className='icon' style={{ rotate: sortBy ? "0deg" : "180deg" }} />
+        <button onClick={() => setSortBy((is) => !is)}>
+          <ArrowUpCircleIcon className='icon' 
+          style={{ rotate: sortBy ? "0deg" : "180deg" }} />
         </button>
       </div>
       <ul>
