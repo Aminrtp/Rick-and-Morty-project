@@ -45,9 +45,7 @@ export function Favourites({ favourites,onDeleteFavourite }) {
                 {
                     favourites.map(item => <Character
                         key={item.id}
-                        item={item}
-                        onSelectCharacter={() => { }}
-                        selectedId={item.id}>
+                        item={item}>
                         <button className='icon red' onClick={() => onDeleteFavourite(item.id)}>
                             <TrashIcon />
                         </button>
