@@ -41,7 +41,7 @@ export function Favourites({ favourites,onDeleteFavourite }) {
     const [open, setOpen] = useState(false);
     return (
         <>
-            <Modal open={open} title={"modal"} onOpen={setOpen}>
+            <Modal open={open} title={"Favourites"} onOpen={setOpen}>
                 {
                     favourites.map(item => <Character
                         key={item.id}
